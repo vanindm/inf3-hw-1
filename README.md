@@ -28,10 +28,10 @@ ctest
 
 Производительность
 
-![Тест](./contribb/perf_test.png)
+![Тест](./contrib/perf_test.png)
 
 Использование памяти
 
-![Тест](./contribb/mem_test.png)
+![Тест](./contrib/mem_test.png)
 
 ![МИФИ](./contrib/mephi.png)
