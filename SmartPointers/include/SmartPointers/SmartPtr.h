@@ -6,40 +6,74 @@ namespace SmartPointers {
 	template<class T>
 	class SmartPtr {
 		T* pointer;
-		int *counter;
+		size_t *counter;
 		public:
-			SmartPtr(T& item) {
-				pointer = malloc(sizeof(T));
+			SmartPtr() : pointer(nullptr), counter(nullptr) {}
+			SmartPtr(const T& item) {
+				pointer = new T;
 				*pointer = item;
-				counter = new int(1);
+				counter = new size_t(1);
 			}
 
-			SmartPtr(T&& item) {
+			SmartPtr(T* p_item) {
+				pointer = p_item;
+				counter = new size_t(1);
 			}
 
-			SmartPtr(SmartPtr<T>& const ptr) {
+			SmartPtr(const SmartPtr<T>& ptr) {
 				this->pointer = ptr.pointer;
 				this->counter = ptr.counter;
-				*(this->counter)++;
+				++*(this->counter);
+			}
+
+			SmartPtr(const SmartPtr<T>&& ptr) {
+				this->pointer = ptr.pointer;
+				this->counter = ptr.counter;
 			}
 
 			~SmartPtr() {
-				*(this->counter)--;
+				--*(this->counter);
 				if (*(this->counter) == 0) {
-					delete this->pointer;
+					delete (this->pointer);
 					delete this->counter;
 				}
 			}
-			T* operator->() {
+
+			int getCount() const {
+				return *this->counter;
+			}
+
+			T& operator*() const {
+				return *pointer;
+			}
+
+			T* operator->() const {
 				return this->pointer;
 			}
 
-			bool operator==(SmartPtr<T>& other) {
+			SmartPtr& operator=(const SmartPtr& other) {
+				pointer = other.pointer;
+				counter = other.counter;
+				return *this;
+			}
+			SmartPtr& operator=(SmartPtr&& other) {
+				pointer = other.pointer;
+				counter = other.counter;
+				other.pointer = nullptr;
+				other.counter = new size_t(1);
+				return *this;
+			}
+
+			bool isEqual(const SmartPtr<T>& other) const {
 				return other.pointer == this->pointer;
 			}
 
-			bool operator!=(SmartPtr<T>& other) {
-				return other.pointer != this->pointer;
+			bool operator==(const SmartPtr<T>& other) const {
+				return this->isEqual(other);
+			}
+
+			bool operator!=(const SmartPtr<T>& other) const {
+				return !(this->isEqual(other));
 			}
 	};
 }
