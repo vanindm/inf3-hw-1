@@ -50,10 +50,8 @@ namespace SmartPointers {
 	public:
 		MemorySpan(size_t count) : span(new T[count]) {}
 		MemorySpan(size_t count, T* list) : span(new T[count]) {
-			MsPtr current = Locate(0);
 			for (size_t i = 0; i < count; ++i) {
-				(*current) = list[i];
-				current = current + 1;
+				span[i] = list[i];
 			}
 		}
 		~MemorySpan() {
