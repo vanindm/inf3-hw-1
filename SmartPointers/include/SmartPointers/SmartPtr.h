@@ -7,16 +7,19 @@ namespace SmartPointers {
 	class SmartPtr {
 		T* pointer;
 		size_t *counter;
+		void (*deleter)(T*) = nullptr;
 		public:
 			SmartPtr() : pointer(nullptr), counter(nullptr) {}
-			SmartPtr(const T& item) {
+			SmartPtr(const T& item, void (*deleter)(T*) = nullptr) {
 				pointer = new T;
 				*pointer = item;
+				this->deleter = deleter;
 				counter = new size_t(1);
 			}
 
-			SmartPtr(T* p_item) {
+			SmartPtr(T* p_item, void (*deleter)(T*) = nullptr) {
 				pointer = p_item;
+				this->deleter = deleter;
 				counter = new size_t(1);
 			}
 
@@ -26,15 +29,21 @@ namespace SmartPointers {
 				++*(this->counter);
 			}
 
-			SmartPtr(const SmartPtr<T>&& ptr) {
+			SmartPtr(SmartPtr<T>&& ptr) {
 				this->pointer = ptr.pointer;
 				this->counter = ptr.counter;
+				ptr.pointer = nullptr;
+				ptr.counter = nullptr;
+				delete ptr;
 			}
 
 			~SmartPtr() {
 				--*(this->counter);
 				if (*(this->counter) == 0) {
-					delete (this->pointer);
+					if (deleter)
+						deleter(this->pointer);
+					else
+						delete (this->pointer);
 					delete this->counter;
 				}
 			}

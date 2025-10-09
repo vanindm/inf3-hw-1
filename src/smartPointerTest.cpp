@@ -11,6 +11,7 @@ int main() {
 		SmartPointers::SmartPtr<std::string> assignTest = inheritanceTest;
 		assert(assignTest.getCount() == 3);
 	}
+	SmartPointers::SmartPtr<int> arrTest(new int[4]{1,2,3,4}, [](int* p){delete[] p;});
 	assert(strTest.getCount() == 1);
 	return 0;
 }

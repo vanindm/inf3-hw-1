@@ -1,6 +1,6 @@
 import random
 
-n = 10 ** 8
+n = 10 ** 4
 
 with open("testdata.input", "w") as f:
 #    f.write(str(n))

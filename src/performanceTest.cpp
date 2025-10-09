@@ -111,6 +111,23 @@ int main(int argc, char** argv) {
 	std::cout << elapsed.count() << " : " << (rss_after - rss_before) << "\n";
 
 //-------------------------------------------------------------------
+
+	process_mem_usage(rss_before);
+
+	start = std::chrono::steady_clock::now();
+
+	MemorySpanDynamicArray<int> arrayMemorySpan(AMOUNT, items);
+
+	end = std::chrono::steady_clock::now();
+
+	process_mem_usage(rss_after);
+	
+	elapsed = end - start;
+
+	//std::cout << "MemorySpan DynamicArray Allocation\n";
+	std::cout << elapsed.count() << " : " << (rss_after - rss_before) << "\n";
+
+//-------------------------------------------------------------------
 	delete[] items;
 	return 0;
 }
